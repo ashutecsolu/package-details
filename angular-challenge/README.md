@@ -34,6 +34,18 @@ See `src/ComparisonExample.xlsx` for an example of a comparison report.
 
 All the data should be loaded into the browser memory (via the in memory db). You should be able to access the model data through api calls (e.g `api/users` will fetch all the users), so you should be able to build the required services based on that.
 
+###Api Endpoints:
+
+####users: `api/users`
+####accounts: `api/accounts`
+####packages: `api/packages`
+####sections: `api/sections`
+####line_items: `api/line_items`
+####compliance_fields: `api/compliance_fields`
+####bids: `api/bids`
+####bid_rates: `api/bid_rates`
+####bid_compliance_values: `api/bid_compliance_values`
+
 ## Challenge Requirements
 
 Using the provided information and pre-loaded data, please deliver a package list view, and a package detail (comparison) view (with breakdown and compliance pages) similar to the Excel example we have provided.
