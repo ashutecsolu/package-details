@@ -2,6 +2,10 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.1.
 
+## Installation
+
+In addition to installing angular, also run `npm install angular-in-memory-web-api --save` or `yarn add angular-in-memory-web-api` to install the required in-memory database system.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
@@ -9,10 +13,6 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Installation
-
-In addition to installing angular, also run `npm install angular-in-memory-web-api --save` or `yarn add angular-in-memory-web-api` to install the required in-memory database system.
 
 ## Challenge Description
 
@@ -31,9 +31,11 @@ Bids (or quotes) are submitted by suppliers based on the package structure (sect
 See `src/ComparisonExample.xlsx` for an example of a comparison report.
 
 ## Challenge Technical Information
+
 All the data should be loaded into the browser memory (via the in memory db). You should be able to access the model data through api calls (e.g `api/users` will fetch all the users), so you should be able to build the required services based on that.
 
 ## Challenge Requirements
+
 Using the provided information and pre-loaded data, please deliver a working comparison (with breakdown and compliance pages) similar to the Excel example we have provided.
 Extra points will be given if you can make the tables searchable and if you can color the rates and amounts based on value (green for lower, red for higher).
 
