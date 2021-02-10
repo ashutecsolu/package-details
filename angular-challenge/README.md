@@ -10,18 +10,26 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+## Challenge Description
+Welcome to Arqflow's Angular coding challenge. This is a front-end focused exercise that we will use to assess your skills on developing client-side features.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+The structure of the challenge is loosely based on one of our products in developments "ArqSource". ArqSource is an advanced sourcing tool for businesses. The product centers around the "Package" concept. 
+A Package is request for bid from the buyer to the seller (also called RFQ, RFP, RFT). A package consists of one or more line items that sellers have to provide rates for. 
+Each line item has a "scope" associated with it that indicates whether a rate is required for it or not. In addition to this, sections are used to group together line items.
+Sections also have a scope, if a section is required, all 'required' line items within it will require rates. If a section is 'optional', either all the required line items within it will require rates, or none of the line items withing the section will require rates.
 
-## Running unit tests
+In addition, packages have compliance fields which are general form fields to be filled out by suppliers when submitting their bids. Each fields can either be required or optional.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+You have been provided with the models in `src/app/models.ts`, study them carefully before starting the challenge.
 
-## Running end-to-end tests
+Bids (or quotes) are submitted by suppliers based on the package structure (sections, line items etc.). The buyer can then view a side-by-side comparison of bids showing both a breakdown of rates and compliance values.
+See `src/ComparisonExample.xlsx` for an example of a comparison report.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## Challenge Technical Information
+All the data should be loaded into the browser memory (via the in memory db). You should be able to access the model data through api calls (e.g `api/users` will fetch all the users), so you should be able to build the required services based on that.
 
-## Further help
+## Challenge Requirements
+Using the provided information and pre-loaded data, please deliver a working comparison (with breakdown and compliance pages) similar to the Excel example we have provided.
+Extra points will be given if you can make the tables searchable and if you can color the rates and amounts based on value (green for lower, red for higher).
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Good Luck!
