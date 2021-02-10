@@ -10,7 +10,12 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
+## Installation
+
+In addition to installing angular, also run `npm install angular-in-memory-web-api --save` or `yarn add angular-in-memory-web-api` to install the required in-memory database system.
+
 ## Challenge Description
+
 Welcome to Arqflow's Angular coding challenge. This is a front-end focused exercise that we will use to assess your skills on developing client-side features.
 
 The structure of the challenge is loosely based on one of our products in developments "ArqSource". ArqSource is an advanced sourcing tool for businesses. The product centers around the "Package" concept. 
