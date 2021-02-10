@@ -36,7 +36,10 @@ All the data should be loaded into the browser memory (via the in memory db). Yo
 
 ## Challenge Requirements
 
-Using the provided information and pre-loaded data, please deliver a working comparison (with breakdown and compliance pages) similar to the Excel example we have provided.
+Using the provided information and pre-loaded data, please deliver a package list view, and a package detail (comparison) view (with breakdown and compliance pages) similar to the Excel example we have provided.
+
+The client should pull the data from the database via the API endpoints. You can structure the components however you wish and use any UI libraries of your choosing.
+
 Extra points will be given if you can make the tables searchable and if you can color the rates and amounts based on value (green for lower, red for higher).
 
 Good Luck!
