@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InMemoryDbService } from 'angular-in-memory-web-api';
-import {Package, User, Account, Section, LineItem, ComplianceField, Bid, BidRate, BidComplianceValue} from "./models";
+import {Package, User, Account, Section, LineItem, ComplianceField, Bid, BidRate, BidComplianceValue} from './models';
 
 @Injectable({
   providedIn: 'root'
@@ -79,7 +79,7 @@ export class InMemoryDataService implements InMemoryDbService {
       // fourth bid
       {id: 3, bid: bids[3], compliance_field: compliance_fields[0], value: true},
     ];
-    return {users};
+    return {users, accounts, packages, sections, line_items, compliance_fields, bids, bid_rates, bid_compliance_values};
   }
   genId(objects: any[]): number {
     return objects.length > 0 ? Math.max(...objects.map(object => object.id)) + 1 : 1;
