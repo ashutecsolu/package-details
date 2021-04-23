@@ -12,7 +12,7 @@ import { PackageComplianceService } from './package-compliance.service';
 })
 export class PackageComplianceComponent implements OnInit {
 
-  packageId: number = 0;
+  packageId = 0;
   complianceList: PackageCompliance[] = [];
   displayedColumns: string[] = ['reference', 'description', 'type', 'requirement'];
   dataSource: MatTableDataSource<PackageCompliance>;
@@ -22,20 +22,22 @@ export class PackageComplianceComponent implements OnInit {
   constructor(private activeRoute: ActivatedRoute, private packageComplianceService: PackageComplianceService) { }
 
   ngOnInit(): void {
-    this.packageId = parseInt(this.activeRoute.snapshot.paramMap.get('id'));
+    this.packageId = parseInt(this.activeRoute.snapshot.paramMap.get('id'), 10);
     this.getComplianceList(this.packageId);
   }
 
-  async getComplianceList(id: number) {
-    this.complianceList = await this.packageComplianceService.getComplianceList(id);
-    this.complianceList[0]?.suppliers.forEach(supplier => {
+  getComplianceList(id: number): void {
+    this.packageComplianceService.getComplianceList(id).subscribe(complianceList => {
+      this.complianceList = complianceList;
+      this.complianceList[0]?.suppliers.forEach(supplier => {
       this.displayedColumns.push(supplier);
     });
-    this.dataSource = new MatTableDataSource(this.complianceList);
-    this.dataSource.paginator = this.paginator;
+      this.dataSource = new MatTableDataSource(this.complianceList);
+      this.dataSource.paginator = this.paginator;
+    });
   }
 
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 

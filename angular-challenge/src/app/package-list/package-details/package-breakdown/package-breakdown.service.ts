@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Bid, BidRate, LineItem } from 'src/app/models';
 import { PackageBreakdown, UnitRate } from './package-breakdown';
 
@@ -10,31 +12,48 @@ export class PackageBreakdownService {
 
   constructor(private http: HttpClient) { }
 
-  async getLineItemList(packageId: number): Promise<PackageBreakdown[]> {
-    let lineItems = await this.getLineItems(packageId);
-    let bids = await this.getBids(packageId);
-    let bidIds = [];
-    let suppliers = [];
-
-    bids.forEach(bid => {
-      suppliers.push(bid.supplier.name);
-      bidIds.push(bid.id);
-    });
-
-    let bidRates = await this.getBidRates();
-    bidRates = bidRates.filter(rate => bidIds.includes(rate.bid.id));
-
-    return new Promise<PackageBreakdown[]>((resolve, reject) => {
-      let packageBreakdownFields: PackageBreakdown[] = [];
-      let sectionReference: string = '';
-      for (let i = 0; i < lineItems.length; i++) {
-        if (lineItems[i].section && lineItems[i].section.reference != sectionReference) {
-          sectionReference = lineItems[i].section.reference;
+  getLineItemList(packageId: number): Observable<PackageBreakdown[]> {
+    return forkJoin([this.getLineItems(packageId),
+      this.getBids(packageId),
+      this.getBidRates()
+    ]).pipe(
+      map(([lineItems, bids, bidRates]) => {
+        const bidIds = [];
+        const suppliers = [];
+        bids.forEach(bid => {
+          suppliers.push(bid.supplier.name);
+          bidIds.push(bid.id);
+        });
+        bidRates = bidRates.filter(rate => bidIds.includes(rate.bid.id));
+        const packageBreakdownFields: PackageBreakdown[] = [];
+        let sectionReference = '';
+        for (const lineItem of lineItems ) {
+          if (lineItem.section && lineItem.section.reference !== sectionReference) {
+            sectionReference = lineItem.section.reference;
+            packageBreakdownFields.push({
+              reference: lineItem.section.reference,
+              description: lineItem.section.description,
+              scope: lineItem.section.scope,
+              suppliers,
+              unitRates: bidRates.map((bidRate: BidRate) => {
+                let rate: UnitRate;
+                rate = {
+                  supplier: bidRate.bid.supplier.name,
+                  rate: bidRate.rate,
+                  amount: bidRate.line_item.quantity * bidRate.rate,
+                  reference: bidRate.line_item.reference
+                };
+                return rate;
+              })
+            });
+          }
           packageBreakdownFields.push({
-            reference: lineItems[i].section.reference,
-            description: lineItems[i].section.description,
-            scope: lineItems[i].section.scope,
-            suppliers: suppliers,
+            reference: lineItem.reference,
+            description: lineItem.description,
+            scope: lineItem.scope,
+            quantity: lineItem.quantity,
+            units: lineItem.units,
+            suppliers,
             unitRates: bidRates.map((bidRate: BidRate) => {
               let rate: UnitRate;
               rate = {
@@ -42,57 +61,26 @@ export class PackageBreakdownService {
                 rate: bidRate.rate,
                 amount: bidRate.line_item.quantity * bidRate.rate,
                 reference: bidRate.line_item.reference
-              }
+              };
               return rate;
             })
           });
         }
-        packageBreakdownFields.push({
-          reference: lineItems[i].reference,
-          description: lineItems[i].description,
-          scope: lineItems[i].scope,
-          quantity: lineItems[i].quantity,
-          units: lineItems[i].units,
-          suppliers: suppliers,
-          unitRates: bidRates.map((bidRate: BidRate) => {
-            let rate: UnitRate;
-            rate = {
-              supplier: bidRate.bid.supplier.name,
-              rate: bidRate.rate,
-              amount: bidRate.line_item.quantity * bidRate.rate,
-              reference: bidRate.line_item.reference
-            }
-            return rate;
-          })
-        })
-      }
-      resolve(packageBreakdownFields);
-    });
+        return packageBreakdownFields;
+      }));
   }
 
-  getLineItems(packageId: number): Promise<LineItem[]> {
-    return new Promise<LineItem[]>((resolve, reject) => {
-      this.http.get('api/line_items').subscribe(async (res: LineItem[]) => {
-        res = res.filter(li => li.package.id === packageId);
-        resolve(res);
-      }, reject);
-    });
+  getLineItems(packageId: number): Observable<LineItem[]> {
+    return this.http.get<LineItem[]>('api/line_items').pipe(
+      map(lineItems => lineItems.filter(li => li.package.id === packageId)));
   }
 
-  getBids(packageId: number): Promise<Bid[]> {
-    return new Promise<Bid[]>((resolve, reject) => {
-      this.http.get('api/bids').subscribe((res: Bid[]) => {
-        res = res.filter(bid => bid.package.id === packageId);
-        resolve(res);
-      }, reject);
-    });
+  getBids(packageId: number): Observable<Bid[]> {
+    return  this.http.get<Bid[]>('api/bids').pipe(
+      map( bids => bids.filter(bid => bid.package.id === packageId)));
   }
 
-  getBidRates(): Promise<BidRate[]> {
-    return new Promise<BidRate[]>((resolve, reject) => {
-      this.http.get('api/bid_rates').subscribe((res: BidRate[]) => {
-        resolve(res);
-      }, reject);
-    });
+  getBidRates(): Observable<BidRate[]> {
+    return  this.http.get<BidRate[]>('api/bid_rates');
   }
 }

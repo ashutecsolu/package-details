@@ -24,13 +24,15 @@ export class PackageListComponent implements OnInit {
     this.getPackageList();
   }
 
-  async getPackageList() {
-    this.packageList = await this.packageListService.getPackageList();
-    this.dataSource = new MatTableDataSource(this.packageList);
-    this.dataSource.paginator = this.paginator;
+  getPackageList(): void {
+    this.packageListService.getPackageList().subscribe( packages => {
+      this.packageList = packages;
+      this.dataSource = new MatTableDataSource(this.packageList);
+      this.dataSource.paginator = this.paginator;
+    });
   }
 
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 

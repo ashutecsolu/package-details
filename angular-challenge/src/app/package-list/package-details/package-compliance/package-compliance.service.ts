@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Account, Bid, BidComplianceValue, ComplianceField } from 'src/app/models';
+import { Bid, BidComplianceValue, ComplianceField } from 'src/app/models';
+import { Observable, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { PackageCompliance, ComplianceBid } from './package-compliance';
 
 @Injectable({
@@ -10,63 +12,50 @@ export class PackageComplianceService {
 
   constructor(private http: HttpClient) { }
 
-  async getComplianceList(packageId: number): Promise<PackageCompliance[]> {
-
-    let complianceFields = await this.getComplianceFields(packageId);
-    let bids = await this.getBids(packageId);
-    let suppliers = [];
-    bids.forEach(bid => {
-      suppliers.push(bid.supplier.name);
-    });
-    let complianceBids = await this.getComplianceBidValues();
-    
-    return new Promise<PackageCompliance[]>((resolve, reject) => {
-      let packageComplianceFields: PackageCompliance[] = [];
-      complianceFields.forEach(field => {
-        packageComplianceFields.push({
-          reference: field.reference,
-          description: field.description,
-          type: field.type,
-          requirement: field.requirement,
-          suppliers: suppliers,
-          complianceBids: complianceBids.map(cb => {
-            let compliance: ComplianceBid;
-            compliance = {
-              reference: cb.compliance_field.reference,
-              supplier: cb.bid.supplier.name,
-              value: cb.value
-            }
-            return compliance;
-          })
-        })
-      });
-      resolve(packageComplianceFields);
-    });
+  getComplianceList(packageId: number): Observable<PackageCompliance[]> {
+    return forkJoin([this.getComplianceFields(packageId),
+      this.getBids(packageId),
+      this.getComplianceBidValues()]
+      ).pipe(
+      map(([complianceFields, bids, complianceBids]) => {
+        const suppliers = [];
+        bids.forEach(bid => {
+          suppliers.push(bid.supplier.name);
+        });
+        const packageComplianceFields: PackageCompliance[] = [];
+        complianceFields.forEach(field => {
+          packageComplianceFields.push({
+            reference: field.reference,
+            description: field.description,
+            type: field.type,
+            requirement: field.requirement,
+            suppliers,
+            complianceBids: complianceBids.map(cb => {
+              let compliance: ComplianceBid;
+              compliance = {
+                reference: cb.compliance_field.reference,
+                supplier: cb.bid.supplier.name,
+                value: cb.value
+              };
+              return compliance;
+            })
+          });
+        });
+        return packageComplianceFields;
+      }));
   }
 
-  getComplianceFields(packageId: number): Promise<ComplianceField[]> {
-    return new Promise<ComplianceField[]>((resolve, reject) => {
-      this.http.get('api/compliance_fields').subscribe((res: ComplianceField[]) => {
-        res = res.filter(c => c.package.id === packageId);
-        resolve(res);
-      }, reject);
-    });
+  getComplianceFields(packageId: number): Observable<ComplianceField[]> {
+    return this.http.get<ComplianceField[]>('api/compliance_fields').pipe(
+      map( complianceFields => complianceFields.filter(c => c.package.id === packageId)));
   }
 
-  getBids(packageId: number): Promise<Bid[]> {
-    return new Promise<Bid[]>((resolve, reject) => {
-      this.http.get('api/bids').subscribe((res: Bid[]) => {
-        res = res.filter(bid => bid.package.id === packageId);
-        resolve(res);
-      }, reject);
-    });
+  getBids(packageId: number): Observable<Bid[]> {
+    return this.http.get<Bid[]>('api/bids').pipe(
+      map(bids => bids.filter(bid => bid.package.id === packageId)));
   }
-  
-  getComplianceBidValues(): Promise<BidComplianceValue[]> {
-    return new Promise<BidComplianceValue[]>((resolve, reject) => {
-      this.http.get('api/bid_compliance_values').subscribe((res: BidComplianceValue[]) => {
-        resolve(res);
-      }, reject);
-    });
+
+  getComplianceBidValues(): Observable<BidComplianceValue[]> {
+    return  this.http.get<BidComplianceValue[]>('api/bid_compliance_values');
   }
 }
