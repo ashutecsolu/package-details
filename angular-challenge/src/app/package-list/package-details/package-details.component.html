@@ -1,0 +1,15 @@
+<div class="component-header">
+    <button mat-icon-button routerLink="/package-list">
+        <mat-icon>arrow_back_ios</mat-icon>
+    </button>
+    <label>Package Details</label>
+</div>
+  
+<mat-tab-group class="tab-container">
+    <mat-tab label="Compliance">
+        <app-package-compliance></app-package-compliance>
+    </mat-tab>
+    <mat-tab label="Breakdown">
+        <app-package-breakdown></app-package-breakdown>
+    </mat-tab>
+</mat-tab-group>

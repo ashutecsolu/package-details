@@ -15,7 +15,7 @@ export class InMemoryDataService implements InMemoryDbService {
     const accounts: Account[] = [
       { id: 1, name: 'Enzyme LLC', description: 'Healthy food products', user: users[0] },
       { id: 2, name: 'Fractal Chemicals LLC', description: 'Supplier of advanced chemicals', user: users[1] },
-      { id: 2, name: 'Chemical Co. ', description: 'Chemical and Industrial Supplies', user: users[2] },
+      { id: 3, name: 'Chemical Co. ', description: 'Chemical and Industrial Supplies', user: users[2] },
     ];
     const packages: Package[] = [
       {id: 1, buyer: accounts[0], name: 'Chemical Supply', status: 'open'},
@@ -53,8 +53,8 @@ export class InMemoryDataService implements InMemoryDbService {
     const bids: Bid[] = [
       {id: 1, package: packages[0], supplier: accounts[1]},
       {id: 2, package: packages[0], supplier: accounts[2]},
-      {id: 1, package: packages[1], supplier: accounts[1]},
-      {id: 2, package: packages[1], supplier: accounts[2]},
+      {id: 3, package: packages[1], supplier: accounts[1]},
+      {id: 4, package: packages[1], supplier: accounts[2]},
     ];
     const bid_rates: BidRate[] = [
       // first bid

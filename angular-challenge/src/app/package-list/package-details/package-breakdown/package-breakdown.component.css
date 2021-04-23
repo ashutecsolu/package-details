@@ -1,0 +1,40 @@
+.line-items-container {
+    height: calc(100% - 1rem - 1rem);
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+}
+  
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+.supplier-header th {
+    border: 0;
+}
+
+.supplier-name {
+    position: relative;
+    font-weight: 900;
+    font-size: 0.85rem;
+}
+
+.section-row {
+    background-color: lightgrey;
+}
+
+.footer-text {
+    font-weight: bold;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}

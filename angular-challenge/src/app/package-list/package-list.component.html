@@ -1,0 +1,61 @@
+<div class="component-header">
+  <label>Packages</label>
+</div>
+
+<div class="package-list-container">
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" #input>
+  </mat-form-field>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource">
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Package Name </th>
+        <td mat-cell *matCellDef="let row"><a routerLink='/package-details/{{row.id}}'> {{row.name}} </a></td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let row"> {{row.status | titlecase }} </td>
+      </ng-container>
+
+      <!-- Buyer Column -->
+      <ng-container matColumnDef="buyer">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Buyer </th>
+        <td mat-cell *matCellDef="let row"> {{row.buyer.name}} </td>
+      </ng-container>
+
+      <!-- Line Items -->
+      <ng-container matColumnDef="line_items">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Line Items </th>
+        <td mat-cell *matCellDef="let row"> {{row.line_items}} </td>
+      </ng-container>
+
+      <!-- Sections -->
+      <ng-container matColumnDef="sections">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Sections </th>
+        <td mat-cell *matCellDef="let row"> {{row.sections}} </td>
+      </ng-container>
+
+      <!-- Compliance Fields -->
+      <ng-container matColumnDef="compliance_fields">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Compliance Fields </th>
+        <td mat-cell *matCellDef="let row"> {{row.compliance_fields}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10]"></mat-paginator>
+  </div>
+</div>

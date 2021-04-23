@@ -1,0 +1,25 @@
+.component-header {
+    padding: 1rem;
+}
+
+.component-header button {
+    position: relative;
+    bottom: 7px;
+}
+
+.component-header button mat-icon {
+    color: rgba(0,0,0,.54);
+}
+
+.component-header label {
+    font-size: 2rem;
+    color: rgba(0,0,0,.54);
+}
+
+.tab-container {
+    height: calc(100% - 72px);
+}
+
+::ng-deep app-package-details .mat-tab-body-wrapper {
+    height: calc(100% - 49px);
+}

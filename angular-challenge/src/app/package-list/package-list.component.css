@@ -1,0 +1,28 @@
+.component-header {
+    height: 40px;
+    padding: 1rem;
+}
+
+.component-header label {
+    font-size: 2rem;
+    color: rgba(0,0,0,.54);
+}
+
+.package-list-container {
+    height: calc(100% - 72px - 1rem - 1rem);
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+}
+  
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+  
+td, th {
+    width: 16.66%;
+}

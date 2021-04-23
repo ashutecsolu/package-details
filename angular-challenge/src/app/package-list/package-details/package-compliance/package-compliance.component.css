@@ -1,0 +1,14 @@
+.compliance-container {
+    height: calc(100% - 1rem - 1rem);
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+}
+  
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
